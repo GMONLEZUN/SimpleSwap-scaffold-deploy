@@ -22,10 +22,29 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("YourContract", {
+  const tokenA = await deploy("TokenA", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: [],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+  const tokenB = await deploy("TokenB", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
+  const simpleSwap = await deploy("SimpleSwap", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [tokenA.address, tokenB.address],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -33,12 +52,20 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
 
   // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  const _tokenAContract = await hre.ethers.getContract<Contract>("TokenA", deployer);
+  const _tokenBContract = await hre.ethers.getContract<Contract>("TokenB", deployer);
+  const _simpleSwapContract = await hre.ethers.getContract<Contract>("SimpleSwap", deployer);
+  console.log("TokenA deployed at:", tokenA.address);
+  console.log("TokenB deployed at:", tokenB.address);
+  console.log("SimpleSwap deployed at:", simpleSwap.address);
+
+  console.log("tokenA: ", _tokenAContract);
+  console.log("tokenB:", _tokenBContract);
+  console.log("SimpleSwap:", _simpleSwapContract);
 };
 
 export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+deployYourContract.tags = ["TokenA", "TokenB", "SimpleSwap"];
