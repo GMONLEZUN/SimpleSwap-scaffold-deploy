@@ -208,5 +208,20 @@ describe("SimpleSwap", function () {
       expect(reserveA).to.equal(0);
       expect(reserveB).to.equal(0);
     });
+    it("Should handle deadline exceeded", async function () {
+      const pastDeadline = 1748814182;
+
+      await expect(
+        simpleSwap.removeLiquidity(
+          await tokenA.getAddress(),
+          await tokenB.getAddress(),
+          ethers.parseEther("200"),
+          0,
+          0,
+          user.address,
+          pastDeadline,
+        ),
+      ).to.be.revertedWith("Deadline exceeded.");
+    });
   });
 });
