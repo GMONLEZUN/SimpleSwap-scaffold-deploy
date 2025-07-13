@@ -3,6 +3,7 @@ import { ethers } from "hardhat";
 import { SimpleSwap, TokenA, TokenB } from "../typechain-types";
 
 describe("SimpleSwap", function () {
+  let owner: any;
   let user: any;
   let tokenA: TokenA;
   let tokenB: TokenB;
@@ -168,7 +169,7 @@ describe("SimpleSwap", function () {
           0,
           0,
           [await tokenA.getAddress(), await tokenB.getAddress()],
-          user.address,
+          owner.address,
           deadline,
         ),
       ).to.be.revertedWith("Positive value of tokens required.");
