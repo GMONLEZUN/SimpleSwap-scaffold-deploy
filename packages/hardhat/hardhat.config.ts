@@ -51,6 +51,10 @@ const config: HardhatUserConfig = {
         url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
+      blockGasLimit: 0x1fffffffffffff, // Máximo posible
+      gas: "auto",
+      gasPrice: "auto",
+      allowUnlimitedContractSize: true,
     },
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,

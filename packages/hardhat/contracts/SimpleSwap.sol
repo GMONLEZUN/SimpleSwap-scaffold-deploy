@@ -151,9 +151,9 @@ contract SimpleSwap is ERC20 {
             reserveB += amountIn;
             reserveA -= amountOut;
             IERC20(tokenA).transfer(to, amountOut);
-            amounts[0]=amountIn;
-            amounts[1]=amountOut;
-            return amounts;
+            _amounts[0]=amountIn;
+            _amounts[1]=amountOut;
+            return _amounts;
         } 
     }
     /**
